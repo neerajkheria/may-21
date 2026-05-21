@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AI Streaming Test</title>
+</head>
+
+<body>
+
+<h2>AI Streaming Test</h2>
+
+<div
+    id="output"
+    style="
+        font-family: monospace;
+        white-space: pre-wrap;
+    "
+></div>
+
+<script>
+
+const evtSource = new EventSource(
+    "http://localhost:8001/stream?query=refund"
+);
+
+evtSource.onmessage = function(event) {
+
+    const data = JSON.parse(event.data);
+
+    if (data.event === "token") {
+
+        document.getElementById("output").innerHTML += data.token;
+    }
+
+    if (data.event === "done") {
+
+        evtSource.close();
+    }
+};
+
+</script>
+
+</body>
+</html>
